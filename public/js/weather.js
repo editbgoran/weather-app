@@ -1,25 +1,22 @@
-window.onload = function() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        alert("Geolocation is not supported by this browser.");
-    }
-};
-
-function showPosition(position) {
-    console.log(position.coords.latitude);
-    console.log( position.coords.longitude);
-}
-
 function getWeatherForSpecifiedCity() {
     let city = document.getElementById("autocomplete").value;
-    let getRequestedCityWeatherInformation = fetch('/' + city, {
-        method: 'GET',
-    })
-        .then(response => response.json())
-        .then(data => {
-            addWeatherInformationAboutCityToHtml(data);
-        });
+    if(!city.length) {
+        let valError = document.querySelector(".validation-errors");
+        valError.innerHTML = '';
+        valError.style.color = 'red';
+        valError.innerHTML = "Please fill out this field."
+    }
+    else {
+        document.querySelector(".validation-errors").innerHTML = '';
+
+        fetch('/' + city, {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                addWeatherInformationAboutCityToHtml(data);
+            });
+    }
 }
 
 function addWeatherInformationAboutCityToHtml(data) {
@@ -30,7 +27,11 @@ function addWeatherInformationAboutCityToHtml(data) {
 
 function initService() {
     let input = document.getElementById('autocomplete');
-    new google.maps.places.Autocomplete(input);
+    let options = {
+        types: ['(cities)'],
+    };
+
+    new google.maps.places.Autocomplete(input,options);
 }
 
 

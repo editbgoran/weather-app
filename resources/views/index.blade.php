@@ -10,14 +10,39 @@
 </head>
 <body>
 <div>
-    {{$forecast["city"] ."," .$forecast["country"]}} <br>
-    {{$forecast["description"]}} <br>
-    {{$forecast["temperature"]." C"}} <br><br>
-
+    <div>
+        {{$city}}, {{$country}}<br>
+        {{$current["temperature"]. " °C"}} <br>
+        {{$current["weather"]}}
+    </div>
+    <p>Weather forecast for the next seven days:</p>
+    <div style="display: flex">
+    @foreach($forecastDaily as $day)
+        <div style="width: 100%">
+          Date:  {{$day["date"]}} <br>
+          Min. temp:  {{$day["min-temp"]. " °C"}} <br>
+          Max. temp:  {{$day["max-temp"]. " °C"}} <br>
+          {{$day["weather-description"]}}
+        </div>
+    @endforeach
+    </div>
+    <br>
     <div class="form-group">
         <label>City</label><br>
-        <input type="text" name="autocomplete" id="autocomplete" class="form-control" placeholder="Choose Location">
+        <input type="text" name="autocomplete" id="autocomplete" class="form-control" placeholder="Choose City">
         <button type="submit" onclick="getWeatherForSpecifiedCity()">Submit</button>
+        <p class="validation-errors"></p>
+    </div>
+
+    <div class="most-searched-cities">
+        @if(count($mostSearchedCities) > 0)
+        <h4>Most searched places</h4>
+        <ul>
+            @foreach ($mostSearchedCities as $city)
+                <li>{{$city}}</li>
+            @endforeach
+        </ul>
+        @endif
     </div>
 
     <div class="another-city">
